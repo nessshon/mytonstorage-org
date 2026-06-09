@@ -7,7 +7,7 @@ const offersCache = new Map<string, ProviderOffer>();
 const OFFERS_CACHE_TTL = 1000 * 60 * 15; // 15 минут
 
 // API base URL from env with safe fallback
-const host = (typeof process !== 'undefined' && process.env.PUBLIC_API_BASE) || "https://mytonstorage.org";
+const host = (typeof process !== 'undefined' && process.env.NEXT_PUBLIC_API_BASE) || "https://mytonstorage.org";
 
 export async function setBagStorageContract(bagId: string, addr: string): Promise<ApiResponse> {
   var error: string | null = null;

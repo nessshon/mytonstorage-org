@@ -22,7 +22,7 @@ import { useTranslation } from "react-i18next";
 
 export function FilesList() {
   const { t } = useTranslation();
-  const apiBase = (typeof process !== 'undefined' && process.env.PUBLIC_API_BASE) || "https://mytonstorage.org";
+  const apiBase = (typeof process !== 'undefined' && process.env.NEXT_PUBLIC_API_BASE) || "https://mytonstorage.org";
   const [tonConnectUI] = useTonConnectUI();
   const wallet = useTonWallet();
   const [error, setError] = useState<string | null>(null);

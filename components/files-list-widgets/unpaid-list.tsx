@@ -25,7 +25,7 @@ export function UnpaidFilesList() {
     const [copiedKey, setCopiedKey] = useState<string | null>(null);
     const isMobile = useIsMobile();
 
-    const apiBase = useMemo(() => (typeof process !== 'undefined' && process.env.PUBLIC_API_BASE) || "https://mytonstorage.org", []);
+    const apiBase = useMemo(() => (typeof process !== 'undefined' && process.env.NEXT_PUBLIC_API_BASE) || "https://mytonstorage.org", []);
 
     useEffect(() => {
         fetchData();

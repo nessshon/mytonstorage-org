@@ -13,7 +13,7 @@ export default function StorageInfo() {
     const widgetData = upload.widgetData;
     const isMobile = useIsMobile();
     const [copiedKey, setCopiedKey] = useState<string | null>(null);
-    const apiBase = (typeof process !== 'undefined' && process.env.PUBLIC_API_BASE) || "https://mytonstorage.org";
+    const apiBase = (typeof process !== 'undefined' && process.env.NEXT_PUBLIC_API_BASE) || "https://mytonstorage.org";
 
     const shortenBagId = (bagId: string) => {
         if (!bagId || bagId.length <= 8) return bagId;

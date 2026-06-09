@@ -34,7 +34,7 @@ const contractUpdateTimeout = 1000 * 60 * 60;
 
 export function ContractDetails({ contractAddress }: ContractDetailsProps) {
     const { t } = useTranslation();
-    const apiBase = (typeof process !== 'undefined' && process.env.PUBLIC_API_BASE) || "https://mytonstorage.org";
+    const apiBase = (typeof process !== 'undefined' && process.env.NEXT_PUBLIC_API_BASE) || "https://mytonstorage.org";
     const [tonConnectUI] = useTonConnectUI();
     const { files, setFiles } = useAppStore();
     const [localContractInfo, setLocalContractInfo] = React.useState<StorageContractFull | null>(null);

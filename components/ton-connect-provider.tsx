@@ -41,7 +41,7 @@ export function TonConnectProvider({ children }: TonConnectProviderProps) {
   return (
     <TonConnectUIProvider 
       uiPreferences={{ theme: THEME.LIGHT }}
-      manifestUrl={(typeof process !== 'undefined' && process.env.PUBLIC_TONCONNECT_MANIFEST_URL) || "https://mytonstorage.org/tonconnect-manifest.json"}
+      manifestUrl={(typeof process !== 'undefined' && process.env.NEXT_PUBLIC_TONCONNECT_MANIFEST_URL) || "https://mytonstorage.org/tonconnect-manifest.json"}
     >
       <TonConnectLanguageSync>
         {children}
