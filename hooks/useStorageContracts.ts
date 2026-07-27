@@ -48,9 +48,14 @@ export function useStorageContracts({
       const resp = await getProvidersStorageChecks(missingChecks);
       const checks = resp.data as ContractStatuses | undefined;
       if (checks?.contracts) {
+        const byAddress = new Map<string, ContractStatus[]>();
         checks.contracts.forEach(c => {
-          const list = (checksCache.current.get(c.address) || []).concat([c]);
-          checksCache.current.set(c.address, list);
+          const list = byAddress.get(c.address) || [];
+          list.push(c);
+          byAddress.set(c.address, list);
+        });
+        byAddress.forEach((list, addr) => {
+          checksCache.current.set(addr, list);
         });
       }
     }
@@ -186,10 +191,31 @@ export function useStorageContracts({
       await new Promise(r => setTimeout(r, 1100));
     }
 
-    // commit
+    // commit: merge fresh, then refresh statuses for all non-closed known contracts
     if (newerReqId.current === myReq) {
-      if (aggregated.length > 0) {
-        setFiles(aggregated.concat(items));
+      const nextList = aggregated.length > 0 ? aggregated.concat(items) : items;
+      const toRefresh = nextList.filter(f => f.status !== 'closed');
+
+      let finalList = nextList;
+      if (toRefresh.length > 0) {
+        // Bust cache only for previously known entries (fresh were just enriched in the scan loop)
+        const previouslyKnown = new Set(items.map(f => f.contractAddress));
+        toRefresh.forEach(f => {
+          if (previouslyKnown.has(f.contractAddress)) {
+            checksCache.current.delete(f.contractAddress);
+          }
+        });
+        const refreshed = await enrich(
+          toRefresh.map(f => f.contractAddress),
+          toRefresh,
+        );
+        if (newerReqId.current !== myReq) return;
+        const byAddress = new Map(refreshed.map(f => [f.contractAddress, f]));
+        finalList = nextList.map(f => byAddress.get(f.contractAddress) || f);
+      }
+
+      if (aggregated.length > 0 || toRefresh.length > 0) {
+        setFiles(finalList);
       }
       if (newHeadLt) {
         useAppStore.getState().setHeadLt(newHeadLt);
